@@ -1,0 +1,7 @@
+{
+    "require": {
+        "react/react": "^0.4.2",
+        "react/http": "^0.4.1",
+        "cboden/ratchet": "^0.3.4"
+    }
+}
