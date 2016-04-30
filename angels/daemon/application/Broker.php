@@ -87,7 +87,7 @@ class Broker implements MessageComponentInterface
         try {
             $user = new ChatUser($connection);
             if ($this->getUserStorage()->findConnectionByUserId($user->id)) {
-                throw new exception\DuplicateConnectionException('Duplicate connection');
+                throw new exception\connection\DuplicateConnection();
             }
 
             $this->getUserStorage()->attach($connection, $user);

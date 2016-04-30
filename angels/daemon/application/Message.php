@@ -1,7 +1,7 @@
 <?php
 namespace angels\daemon\application;
 
-use angels\exceptions\IncorrectCommandException;
+use angels\exception;
 
 /**
  * Class Message
@@ -24,14 +24,14 @@ class Message
 
     /**
      * @param string $message
-     * @throws \angels\exceptions\IncorrectCommandException
+     * @throws exception\connection\IncorrectCommand
      */
     public function __construct($message)
     {
         $this->message = json_decode($message);
 
         if (null === $this->message)
-            throw new IncorrectCommandException('Message is empty');
+            throw new exception\connection\IncorrectCommand('Message is empty');
     }
 
     /**
@@ -45,7 +45,7 @@ class Message
     /**
      * @param $name
      * @return mixed
-     * @throws \angels\exceptions\IncorrectCommandException
+     * @throws exception\connection\IncorrectCommand
      */
     public function __get($name)
     {
@@ -53,7 +53,7 @@ class Message
             return $this->message->$name;
         }
 
-        throw new IncorrectCommandException(sprintf('Message has not field "%s"', $name));
+        throw new exception\connection\IncorrectCommand(sprintf('Message has not field "%s"', $name));
     }
 
     /**

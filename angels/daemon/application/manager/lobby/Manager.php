@@ -30,7 +30,9 @@ class Manager extends Common
         $this->lobbies[self::LOBBY_PLANETARY] = new lobby\Planetary($this);
         $this->lobbies[self::LOBBY_NOVICE] = new lobby\Novice($this);
 
+        $this->on('lobby.command.login', [command\Login::class, 'process']);
         $this->on('lobby.command.changeLobby', [command\ChangeLobby::class, 'process']);
+        $this->on('lobby.command.craft', [command\Craft::class, 'process']);
 
         $this->on('lobby.event.addUnit', [event\addUnit::class, 'process']);
         $this->on('lobby.event.removeUnit', [event\removeUnit::class, 'process']);
@@ -52,14 +54,11 @@ class Manager extends Common
     {
         if (array_key_exists($message->lobbyId, $this->getLobbies())) {
             $lobby = $this->getManager()->getLobbies()[$message->lobbyId];
+
+            $lobby->onMessage($connection, $message);
         } else {
             // todo: создание каналов?
-            $lobby = null;
         }
 
-        if ($message->getCommand() === 'ChangeLobby') {
-            $this->emit('lobby.command.changeLobby', [$lobby, $connection->getUnit()]);
-        } else
-            $lobby->onMessage($connection, $message);
     }
 }

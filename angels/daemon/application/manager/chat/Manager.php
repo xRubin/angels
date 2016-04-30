@@ -25,6 +25,8 @@ class Manager extends Common
 
         $this->chats['common'] = new chat\Open($this);
         $this->chats['trade'] = new chat\Open($this);
+
+        $this->on('chat.message', [command\NewMessage::class, 'process']);
     }
 
     /**

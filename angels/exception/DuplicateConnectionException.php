@@ -1,7 +1,7 @@
 <?php
 namespace angels\exception;
 
-class DuplicateConnectionException extends Exception
+class DuplicateConnection extends \Exception
 {
 
 }
