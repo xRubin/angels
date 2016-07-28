@@ -9,4 +9,7 @@ return [
 
     'db.statistic.host' => '127.0.0.1',
     'db.statistic.port' => 6379,
+
+    'ws.client.host' => '127.0.0.1',
+    'ws.client.port' => 8030,
 ];

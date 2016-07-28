@@ -1,13 +1,6 @@
 <?php
 
-require __DIR__ . '/../../vendor/autoload.php';
-
-use Ratchet\Server\IoServer;
-use Ratchet\Http\HttpServer;
-use Ratchet\WebSocket\WsServer;
-
-use angels\daemon\helpers\Logger;
-use angels\daemon\application\Manager;
+require __DIR__ . '/vendor/autoload.php';
 
 use DI\ContainerBuilder;
 
@@ -27,15 +20,7 @@ $container = $builder->build();
 $application = $container->get(\angels\daemon\application\Application::class);
 $application->setContainer($container);
 
-$ws = new WsServer(
-    new Logger($application)
-);
-$ws->disableVersion(0); // old, bad, protocol version
-
-$server = IoServer::factory(
-    new HttpServer($ws), 8030, "127.0.0.1"
-);
-
+$server = $container->get('server');
 $server->loop->addPeriodicTimer(1, function($timer) use ($application) {
     /** @var \angels\daemon\application\Application $application */
     $application->onTimer();
