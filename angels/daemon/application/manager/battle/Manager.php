@@ -1,7 +1,8 @@
 <?php
 namespace angels\daemon\application\manager\battle;
 
-use angels\daemon\application\Broker;
+use angels\daemon\application\Application;
+use angels\daemon\application\Event;
 use angels\daemon\application\manager\Common;
 use angels\daemon\application\Connection;
 use angels\daemon\application\Message;
@@ -17,13 +18,11 @@ class Manager extends Common
     protected $battles = [];
 
     /**
-     * @param Broker $broker
+     * Manager constructor.
      */
-    public function __construct(Broker $broker)
+    public function __construct()
     {
-        parent::__construct($broker);
-
-        $this->on('timer.1sec', [event\Timer1sec::class, 'process']);
+        $this->on(Event::TIMER_1_SEC, [event\Timer1sec::class, 'process']);
     }
 
     /**

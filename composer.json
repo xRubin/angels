@@ -1,8 +1,17 @@
 {
+    "name": "xRubin/angels",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist"
+    },
     "require": {
         "react/react": "^0.4.2",
         "react/http": "^0.4.1",
         "cboden/ratchet": "^0.3.4",
-        "ratchet/pawl": "^0.2.2"
+        "ratchet/pawl": "^0.2.2",
+        "php-di/php-di": "^5.3",
+        "doctrine/cache": "~1.4",
+        "codemix/yiiredis": "dev-master"
     }
 }

@@ -2,15 +2,17 @@
 namespace angels\daemon\application;
 
 use angels\exception;
+use DI\Container;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use angels\daemon\helpers\UserStorage;
 use Evenement;
+use util\pattern\Singleton;
 
 /**
- * Class Broker
+ * Class Application
  */
-class Broker implements MessageComponentInterface
+class Application extends Singleton implements MessageComponentInterface
 {
     protected $sessions = [];
 
@@ -35,16 +37,38 @@ class Broker implements MessageComponentInterface
     protected $userStorage;
 
     /**
-     * @void
+     * @var Container
      */
-    public function __construct()
-    {
-        $this->userStorage = new UserStorage();
+    protected $container;
 
-        $this->battleManager = new manager\battle\Manager($this);
-        $this->chatManager = new manager\chat\Manager($this);
-        $this->lobbyManager = new manager\lobby\Manager($this);
+//    /**
+//     * @void
+//     */
+//    public function __construct()
+//    {
+//        $this->userStorage = new UserStorage();
+//
+//        $this->battleManager = new manager\battle\Manager($this);
+//        $this->chatManager = new manager\chat\Manager($this);
+//        $this->lobbyManager = new manager\lobby\Manager($this);
+//    }
+
+    /**
+     * Application constructor.
+     * @param UserStorage $userStorage
+     * @param manager\battle\Manager $battleManager
+     * @param manager\chat\Manager $chatManager
+     * @param manager\lobby\Manager $lobbyManager
+     */
+    public function __construct(UserStorage $userStorage, manager\battle\Manager $battleManager, manager\chat\Manager $chatManager, manager\lobby\Manager $lobbyManager)
+    {
+        $this->userStorage = $userStorage;
+
+        $this->battleManager = $battleManager;
+        $this->chatManager = $chatManager;
+        $this->lobbyManager = $lobbyManager;
     }
+
 
     /**
      * @return manager\battle\Manager
@@ -78,6 +102,21 @@ class Broker implements MessageComponentInterface
         return $this->userStorage;
     }
 
+    /**
+     * @return Container
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * @param Container $container
+     */
+    public function setContainer($container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * @param ConnectionInterface $connection
@@ -151,8 +190,8 @@ class Broker implements MessageComponentInterface
      */
     public function onTimer()
     {
-        $this->battleManager->emit('timer.1sec', [$this->battleManager]);
-        $this->chatManager->emit('timer.1sec', [$this->chatManager]);
-        $this->lobbyManager->emit('timer.1sec', [$this->lobbyManager]);
+        $this->battleManager->emit(Event::TIMER_1_SEC);
+        $this->chatManager->emit(Event::TIMER_1_SEC);
+        $this->lobbyManager->emit(Event::TIMER_1_SEC);
     }
 }

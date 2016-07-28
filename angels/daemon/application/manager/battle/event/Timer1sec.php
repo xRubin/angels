@@ -1,11 +1,11 @@
 <?php
 namespace angels\daemon\application\manager\battle\event;
 
-use angels\daemon\application\Broker;
+use angels\daemon\application\Application;
 
 class Timer1sec extends Common
 {
-    public static function process(Broker $broker)
+    public static function process(Application $broker)
     {
         
     }

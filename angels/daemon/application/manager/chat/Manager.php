@@ -4,7 +4,7 @@ namespace angels\daemon\application\manager\chat;
 use angels\daemon\application\manager\Common;
 use angels\daemon\application\Connection;
 use angels\daemon\application\Message;
-use angels\daemon\application\Broker;
+use angels\daemon\application\Application;
 
 use angels\chat;
 
@@ -17,14 +17,14 @@ class Manager extends Common
     protected $chats = [];
 
     /**
-     * @param Broker $broker
+     * Manager constructor.
      */
-    public function __construct(Broker $broker)
+    public function __construct()
     {
-        parent::__construct($broker);
-
-        $this->chats['common'] = new chat\Open($this);
-        $this->chats['trade'] = new chat\Open($this);
+        //$this->chats['common'] = new chat\Open($this);
+        //$this->chats['trade'] = new chat\Open($this);
+        $this->chats['common'] = Application::getInstance()->getContainer()->get(chat\Open::class);
+        $this->chats['trade'] = Application::getInstance()->getContainer()->get(chat\Open::class);
 
         $this->on('chat.message', [command\NewMessage::class, 'process']);
     }

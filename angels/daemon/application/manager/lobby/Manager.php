@@ -4,7 +4,7 @@ namespace angels\daemon\application\manager\lobby;
 use angels\daemon\application\manager\Common;
 use angels\daemon\application\Connection;
 use angels\daemon\application\Message;
-use angels\daemon\application\Broker;
+use angels\daemon\application\Application;
 
 use angels\lobby;
 
@@ -21,14 +21,12 @@ class Manager extends Common
     const LOBBY_NOVICE = 'novice';
 
     /**
-     * @param Broker $broker
+     * Manager constructor.
      */
-    public function __construct(Broker $broker)
+    public function __construct()
     {
-        parent::__construct($broker);
-
-        $this->lobbies[self::LOBBY_PLANETARY] = new lobby\Planetary($this);
-        $this->lobbies[self::LOBBY_NOVICE] = new lobby\Novice($this);
+        $this->lobbies[self::LOBBY_PLANETARY] = Application::getInstance()->getContainer()->get(lobby\Planetary::class);
+        $this->lobbies[self::LOBBY_NOVICE] = Application::getInstance()->getContainer()->get(lobby\Novice::class);
 
         $this->on('lobby.command.login', [command\Login::class, 'process']);
         $this->on('lobby.command.changeLobby', [command\ChangeLobby::class, 'process']);
