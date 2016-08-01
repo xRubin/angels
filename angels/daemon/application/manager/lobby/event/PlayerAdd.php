@@ -1,14 +1,12 @@
 <?php
-namespace angels\daemon\application\manager\lobby\command;
+namespace angels\daemon\application\manager\lobby\event;
 
 use angels\daemon\application\Event;
 use angels\unit\Common as Unit;
 use angels\lobby\Common as Lobby;
 
-/**
- * Class ChangeLobby
- */
-class ChangeLobby extends Event
+
+class PlayerAdd extends Event
 {
     /**
      * @var Lobby
@@ -45,4 +43,5 @@ class ChangeLobby extends Event
     {
         return $this->unit;
     }
+
 }

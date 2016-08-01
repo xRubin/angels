@@ -1,7 +1,16 @@
 <?php
 namespace angels\daemon\application;
 
-class Event
+/**
+ * Class Event
+ */
+class Event extends \Symfony\Component\EventDispatcher\Event
 {
-    const TIMER_1_SEC = 'timer.1sec';
+    /**
+     * @param Event $event
+     */
+    public static function process(Event $event)
+    {
+
+    }
 }

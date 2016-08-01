@@ -1,12 +1,13 @@
 <?php
 namespace angels\daemon\application;
 
+use angels\daemon\application\event\Interval1Sec;
 use angels\exception;
 use DI\Container;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 use angels\daemon\helpers\UserStorage;
-use Evenement;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use util\pattern\Singleton;
 
 /**
@@ -41,17 +42,10 @@ class Application extends Singleton implements MessageComponentInterface
      */
     protected $container;
 
-//    /**
-//     * @void
-//     */
-//    public function __construct()
-//    {
-//        $this->userStorage = new UserStorage();
-//
-//        $this->battleManager = new manager\battle\Manager($this);
-//        $this->chatManager = new manager\chat\Manager($this);
-//        $this->lobbyManager = new manager\lobby\Manager($this);
-//    }
+    /**
+     * @var EventDispatcher
+     */
+    protected $dispatcher;
 
     /**
      * Application constructor.
@@ -62,6 +56,8 @@ class Application extends Singleton implements MessageComponentInterface
      */
     public function __construct(UserStorage $userStorage, manager\battle\Manager $battleManager, manager\chat\Manager $chatManager, manager\lobby\Manager $lobbyManager)
     {
+        $this->dispatcher = new EventDispatcher();
+
         $this->userStorage = $userStorage;
 
         $this->battleManager = $battleManager;
@@ -116,6 +112,14 @@ class Application extends Singleton implements MessageComponentInterface
     public function setContainer($container)
     {
         $this->container = $container;
+    }
+
+    /**
+     * @return EventDispatcher
+     */
+    public function getDispatcher()
+    {
+        return $this->dispatcher;
     }
 
     /**
@@ -190,8 +194,6 @@ class Application extends Singleton implements MessageComponentInterface
      */
     public function onTimer()
     {
-        $this->battleManager->emit(Event::TIMER_1_SEC);
-        $this->chatManager->emit(Event::TIMER_1_SEC);
-        $this->lobbyManager->emit(Event::TIMER_1_SEC);
+        $this->getDispatcher()->dispatch(Interval1Sec::class, new Interval1Sec());
     }
 }

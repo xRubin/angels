@@ -27,6 +27,8 @@ class Manager extends Common
         $this->chats['trade'] = Application::getInstance()->getContainer()->get(chat\Open::class);
 
         $this->on('chat.message', [command\NewMessage::class, 'process']);
+
+        $this->getDispatcher()->addListener(command\NewMessage::class, [command\NewMessage::class, 'process']);
     }
 
     /**

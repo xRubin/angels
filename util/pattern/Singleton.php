@@ -1,10 +1,16 @@
 <?php
 namespace util\pattern;
 
+/**
+ * Class Singleton
+ */
 abstract class Singleton
 {
     private static $_instances = array();
 
+    /**
+     * @return static
+     */
     public static function getInstance()
     {
         $class = get_called_class();

@@ -12,6 +12,7 @@
         "ratchet/pawl": "^0.2.2",
         "php-di/php-di": "^5.3",
         "doctrine/cache": "~1.4",
-        "codemix/yiiredis": "dev-master"
+        "codemix/yiiredis": "dev-master",
+        "symfony/event-dispatcher": "^3.1"
     }
 }

@@ -1,8 +1,6 @@
 <?php
 namespace angels\daemon\application\manager\battle;
 
-use angels\daemon\application\Application;
-use angels\daemon\application\Event;
 use angels\daemon\application\manager\Common;
 use angels\daemon\application\Connection;
 use angels\daemon\application\Message;
@@ -22,7 +20,8 @@ class Manager extends Common
      */
     public function __construct()
     {
-        $this->on(Event::TIMER_1_SEC, [event\Timer1sec::class, 'process']);
+        $this->getDispatcher()->addSubscriber(new EventSubscriber());
+        $this->getDispatcher()->addSubscriber(new CommandSubscriber());
     }
 
     /**

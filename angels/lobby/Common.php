@@ -12,15 +12,11 @@ use angels\unit\Common as Unit;
 use angels\daemon\application\manager\lobby\event;
 use angels\daemon\application\manager\lobby\command;
 
-use Evenement;
-
 /**
  * Class Common
  */
 abstract class Common
 {
-    use Evenement\EventEmitterTrait;
-
     /** @var Manager */
     protected $manager;
 

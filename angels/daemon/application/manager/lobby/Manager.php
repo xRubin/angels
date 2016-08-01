@@ -28,12 +28,8 @@ class Manager extends Common
         $this->lobbies[self::LOBBY_PLANETARY] = Application::getInstance()->getContainer()->get(lobby\Planetary::class);
         $this->lobbies[self::LOBBY_NOVICE] = Application::getInstance()->getContainer()->get(lobby\Novice::class);
 
-        $this->on('lobby.command.login', [command\Login::class, 'process']);
-        $this->on('lobby.command.changeLobby', [command\ChangeLobby::class, 'process']);
-        $this->on('lobby.command.craft', [command\Craft::class, 'process']);
-
-        $this->on('lobby.event.addUnit', [event\addUnit::class, 'process']);
-        $this->on('lobby.event.removeUnit', [event\removeUnit::class, 'process']);
+        $this->getDispatcher()->addSubscriber(new EventSubscriber());
+        $this->getDispatcher()->addSubscriber(new CommandSubscriber());
     }
 
     /**
