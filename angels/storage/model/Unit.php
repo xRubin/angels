@@ -1,8 +1,10 @@
 <?php
 namespace angels\storage\model;
 
+use angels\daemon\application\Application;
 use angels\storage\db\Game;
-use util\db\Model;
+use util\db\AutoIncrementInterface;
+use util\db\model\Hash;
 
 /**
  * Class Unit
@@ -10,14 +12,14 @@ use util\db\Model;
  * @property string $ownerId
  * @property string $dt
  */
-class Unit extends Model
+class Unit extends Hash implements AutoIncrementInterface
 {
     /**
      * @return Game
      */
     public function getConnection()
     {
-        return Application::getInstance()->get('db.game');
+        return Application::getInstance()->getContainer()->get('db.game');
     }
 
     /**
@@ -33,7 +35,7 @@ class Unit extends Model
      */
     public function setOwner(Player $model)
     {
-        $this->ownerId = $model->name;
+        $model->addUnit($this);
     }
 
     /**
@@ -41,6 +43,8 @@ class Unit extends Model
      */
     public function getOwner()
     {
-        return new Player($this->ownerId);
+        return new Player(
+            new PlayerCounter($this->ownerId)
+        );
     }
 }
