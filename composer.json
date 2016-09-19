@@ -1,5 +1,5 @@
 {
-    "name": "xRubin/angels",
+    "name": "rubin/angels",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
