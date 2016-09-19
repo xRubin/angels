@@ -28,14 +28,19 @@ class WebsocketTestCase extends \PHPUnit_Framework_TestCase
 
         $conn->on('message', function (\Ratchet\RFC6455\Messaging\MessageInterface $msg) use ($conn, $auth) {
             $conn->removeAllListeners('message');
-            if ($msg === 'ok')
-                $auth->resolve($conn);
 
-            $auth->reject(new \RuntimeException("Received: {$msg}"));
+            $data = json_decode($msg, true);
+            
+            assertArrayHasKey('result', $data);
+            assertArrayHasKey('data', $data);
+            assertArrayHasKey('id', $data['data']);
+            assertEquals(2, (int)$data['data']['id']);
+
+            $auth->resolve($conn);
         });
 
         $conn->send(json_encode([
-            'command' => 'l:login',
+            'command' => 'auth:command\login',
             'login' => 'test',
             'password' => 'test'
         ]));

@@ -9,42 +9,23 @@ use util\db\ModelInterface;
  */
 abstract class Set extends \ARedisSet implements ModelInterface
 {
-    private $_name;
+    private $_key;
 
     /**
-     * @param string|null $counter
-     * @throws DatabaseException
+     * @param string|null $key
      */
-    public function __construct($counter)
+    public function __construct($key = null)
     {
-        $this->_name = $this->getKeyName($counter);
+        $this->_key = (string)$key;
 
-        /** @var \Redis $client */
-        if (!$this->getConnection()->getClient()->exists($this->_name))
-            throw new DatabaseException('Record "' . $this->_name . '"" not exists');
-
-        parent::__construct($this->_name, $this->getConnection());
+        parent::__construct($this->getTableName($key), $this->getConnection());
     }
-
-    /**
-     * @param mixed $counter
-     * @return string
-     */
-    private function getKeyName($counter)
-    {
-        return sprintf($this->getTableName(), (string)$counter);
-    }
-
-    /**
-     * @return Connection
-     */
-    abstract public function getTableName();
 
     /**
      * @return string
      */
-    public function getName()
+    public function getKey()
     {
-        return $this->_name;
+        return $this->_key;
     }
 }

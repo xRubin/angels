@@ -1,6 +1,6 @@
 <?php
 
-class Craft extends WebsocketTestCase
+class CraftTest extends WebsocketTestCase
 {
     public function testExceptionIfNotEnoughItems()
     {

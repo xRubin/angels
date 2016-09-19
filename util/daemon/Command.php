@@ -18,10 +18,11 @@ abstract class Command extends \Symfony\Component\EventDispatcher\Event
 
     /**
      * Command constructor.
-     * @param Message|null $message
+     * @param Message $message
      */
-    public function __construct(Message $message = null)
+    public function __construct(Message $message)
     {
+        $this->validate($message);
         $this->message = $message;
     }
 
@@ -32,7 +33,7 @@ abstract class Command extends \Symfony\Component\EventDispatcher\Event
      */
     public function __get($name)
     {
-        if ((null !== $this->message) && isset($this->message->$name)) {
+        if (isset($this->message->$name)) {
             return $this->message->$name;
         }
 
@@ -56,8 +57,14 @@ abstract class Command extends \Symfony\Component\EventDispatcher\Event
     }
 
     /**
+     * @param Message $message
+     */
+    protected function validate(Message $message)
+    {
+    }
+    
+    /**
      * Вызов обработчика
-     * @void
      */
     abstract public function process();
 }

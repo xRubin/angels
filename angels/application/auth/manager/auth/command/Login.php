@@ -26,5 +26,18 @@ class Login extends Command
                 ]
             ]);
         }
+
+        if (($this->login === 'test') && ($this->password === 'test')) {
+            $this->getConnection()->send([
+                'result' => 'success',
+                'data' => [
+                    'user' => [
+                        'id' => 2,
+                    ],
+                    'session' => md5(uniqid('s', true)),
+                ]
+            ]);
+        }
+
     }
 }

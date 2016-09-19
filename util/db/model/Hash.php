@@ -17,7 +17,7 @@ abstract class Hash extends \ARedisHash implements ModelInterface
      * @throws \OutOfBoundsException
      * @throws \ErrorException
      */
-    public function __construct($key = null, $checkExists = true)
+    final public function __construct($key = null, $checkExists = true)
     {
         if (null === $key) {
             if ($this instanceof AutoIncrementInterface) {
@@ -34,6 +34,52 @@ abstract class Hash extends \ARedisHash implements ModelInterface
         $this->_key = (string)$key;
 
         parent::__construct($this->getTableName($key), $this->getConnection());
+
+        $this->init();
+    }
+
+    /**
+     * Initialize
+     */
+    public function init()
+    {
+
+    }
+
+    /**
+     * @param  array  $attributes
+     * @return static
+     */
+    public static function create(array $attributes)
+    {
+        $model = new static(null, false);
+        $model->fill($attributes);
+        return $model;
+    }
+
+    /**
+     * @param  string $key
+     * @return static
+     */
+    public static function find($key)
+    {
+        try {
+            return new static($key);
+        } catch (\OutOfBoundsException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param  array  $attributes
+     * @return $this
+     */
+    public function fill(array $attributes)
+    {
+        foreach ($attributes as $key => $value) {
+            $this->$key = $value;
+        }
+        return $this;
     }
 
     /**
@@ -62,8 +108,11 @@ abstract class Hash extends \ARedisHash implements ModelInterface
         if (!array_key_exists($name, $this->relations()))
             throw new \ErrorException('Unknown relation "' . $name . '"');
 
-        $model = $this->relations()[$name];
-        return new $model;
+        $modelClass = $this->relations()[$name];
+        if (! $modelClass instanceof Set)
+            throw new \ErrorException('Incorrect class for relation "' . $name . '"');
+
+        return new $modelClass;
     }
 
     /**
@@ -132,5 +181,13 @@ abstract class Hash extends \ARedisHash implements ModelInterface
             return $this->$setter(null);
         else
             unset($this[$name]);
+    }
+
+    /**
+     * @throws \CException
+     */
+    public function delete()
+    {
+        $this->getConnection()->getClient()->delete($this->getKey());
     }
 }
